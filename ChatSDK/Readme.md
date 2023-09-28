@@ -14,7 +14,7 @@ You must have **AccessKey** and **ProjectToken** to use this SDK in your applica
 Add SDK dependency in your app build.gradle as following:
 
 ```java
-implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:askari_0.2'
+implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:tpl_life_v_0.2.1'
 ```
 in Project build.gradle
 ```java
@@ -38,7 +38,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ### Using AAR file
 
-You can download the latest AAR File from this [link]()
+You can download the latest AAR File from this [link](https://drive.google.com/file/d/158eWZeyHuXJX9GoJ2d3aJEw1mgJvtkIz/view?usp=sharing)
 
 ## Usage
 
@@ -244,7 +244,7 @@ Add these Proguard rules for release build
 -keep class com.tilismtech.** { *; }
 ```
 
-### Color Changes on UI interface
+## Customizing UI
 
 You can customize the app interface by changing color values of the following color resources. a diagram is show below to help you connect color names with their relevant usage in the UI.
 
