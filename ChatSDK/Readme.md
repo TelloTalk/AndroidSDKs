@@ -38,7 +38,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ### Using AAR file
 
-You can download the latest AAR File from this [link](https://drive.google.com/file/d/158eWZeyHuXJX9GoJ2d3aJEw1mgJvtkIz/view?usp=sharing)
+You can download the latest AAR File from this [link](https://drive.google.com/file/d/1u5DSwjJWk7SMnMO5BXz0_I3k9HLq5E7T/view?usp=sharing)
 
 ## Usage
 
@@ -51,7 +51,6 @@ TelloApiClient.Builder builder = new TelloApiClient.Builder()
                 .CRYPTO_LIB_KEY("<USE_PROVIDED_VALUES>")
                 .CRYPTO_LIB_IV("<USE_PROVIDED_VALUES>")
                 .setContext(getApplicationContext())
-                .setApplication(this)
                 .notificationIcon("<PROVIDE_DRAWABLE_RESOURCE_FOR_APP_ICON_HERE>");
 
 telloApiClient = builder.build();
