@@ -46,12 +46,12 @@ Initialize **TelloApiClient** before using any of its features.
 
 ```java
 TelloApiClient.Builder builder = new TelloApiClient.Builder()
-                .accessKey("<YOUR_ACCESS_KEY_HERE>")
-                .projectToken("<YOUR_PROJECT_TOKEN_HERE>")
-                .CRYPTO_LIB_KEY("<USE_PROVIDED_VALUES>")
-                .CRYPTO_LIB_IV("<USE_PROVIDED_VALUES>")
-                .setContext(getApplicationContext())
-                .notificationIcon("<PROVIDE_DRAWABLE_RESOURCE_FOR_APP_ICON_HERE>");
+.accessKey("<YOUR_ACCESS_KEY_HERE>")
+.projectToken("<YOUR_PROJECT_TOKEN_HERE>")
+.CRYPTO_LIB_KEY("<USE_PROVIDED_VALUES>")
+.CRYPTO_LIB_IV("<USE_PROVIDED_VALUES>")
+.setContext(getApplicationContext())
+.notificationIcon  ("<PROVIDE_DRAWABLE_RESOURCE_FOR_ICON_HERE>");
 
 telloApiClient = builder.build();
 ```
@@ -66,10 +66,12 @@ telloApiClient = builder.build();
 Initiate SDK with a user to start receiving messages and to access chat interface:
 
 ```java
+
 telloApiClient.registerUser(String profileId, String name, String mobileNumber, String customerType, HashMap<String, String> hashMap, OnSuccessListener<Boolean> successListener)
+
 ```
 
-This method will return true/false if user is register or not. If this method returns true, SDK will start receiving messages and you can access SDK user interface when needed.
+In this method the `HashMap<String, String>` is optional.It will return true/false if user is register or not. If this method returns true, SDK will start receiving messages and you can access SDK user interface when needed.
 
 ### Set Locality
 
@@ -113,7 +115,8 @@ You can get unread messages count outside the SDK by implementing `MessageCounte
 telloApiClient.setMessageCounterListener(this);
 ```
 
-### Get Button Click event
+### Get Click event on Buttons in Broadcast Message (Local Broadcast OR Local Broadcast with Keys) 
+
 Button click events from inside SDK are fired through the Android's `LocalBroadcastManager`. You can register for an intent in the following way,
 ```java
 private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -180,11 +183,18 @@ public void onMessageReceived(RemoteMessage remoteMessage) {
 }
 ```
 
-### Get Notification Click event
+### Get Broadcast Notification Click event
 
 You can get a notification click event by implementing `onNotificationClickListener` in a class and passing the instance of the class in the following way:
 ```java
 telloApiClient.setNotificationCLickedListener(this);
+```
+
+### Get Broadcast Read more Click event
+
+You can get a click event on load more link by implementing `setAnnouncementCLickedListener` in a class and passing the instance of the class in the following way:
+```java
+telloApiClient.setAnnouncementCLickedListener(this);
 ```
 
 ## Special Android Version Support
