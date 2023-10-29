@@ -14,7 +14,7 @@ You must have **AccessKey** and **ProjectToken** to use this SDK in your applica
 Add SDK dependency in your app build.gradle as following:
 
 ```java
-implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:tpl_life_v_0.2.1'
+implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:v_3.8.2'
 ```
 in Project build.gradle
 ```java
