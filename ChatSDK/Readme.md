@@ -1,4 +1,4 @@
-
+c
 
 # TelloTalkSDK
 
@@ -38,7 +38,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ### Using AAR file
 
-You can download the latest AAR File from this [link]([https://drive.google.com/file/d/1u5DSwjJWk7SMnMO5BXz0_I3k9HLq5E7T/view?usp=sharing](https://drive.google.com/file/d/1ZxVbMZ5hamB3PMhPKlkmc5QBKIM_Cz5c/view?usp=sharing))
+You can download the latest AAR File from this [link]([https://ttsdk-release.s3.eu-west-1.amazonaws.com/android/3.9.0/tellotalksdk-release.aar](https://ttsdk-release.s3.eu-west-1.amazonaws.com/android/3.9.0/tellotalksdk-release.aar))
 
 ## Usage
 
