@@ -37,7 +37,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ### Using AAR file
 
-You can download the AAR File for version [3.9.0](https://ttsdk-release.s3.eu-west-1.amazonaws.com/android/3.9.0/tellotalksdk-release.aar)
+You can download the AAR File for version [3.9.0](https://ttsdk-release.s3.eu-west-1.amazonaws.com/android/3.9.1/3.9.1-release.aar)
 
 ## Usage
 
