@@ -1,23 +1,46 @@
 
-# TelloTalkSDK
+# TelloTalk SDK
 
-TelloTalkSDK is a solution for integrating chat messaging in your app.
+# TelloTalk Android Chat SDK
 
-## Prerequisites
-You must have **AccessKey** and **ProjectToken** to use this SDK in your application.
+TelloTalk Android Chat SDK is a comprehensive solution for integrating a ready-made chatting system into your Android applications seamlessly.
 
+## Features
+
+- Easy integration for instant messaging functionality.
+- Customizable UI elements for a personalized chat experience.
+- Support for multimedia messaging, including text, images, videos, and files.
+- Real-time updates and notifications for an interactive user experience.
+
+## Requirements
+
+To use the SDK, you'll need the following:
+
+- **Access Key**: `<YOUR_ACCESS_KEY>`
+- **Project Token**: `<YOUR_PROJECT_TOKEN>`
+  
 ## Installation
+Installation can be done either remotely via maven or using aar locally.
 
-### Using Maven
+### 1. Maven Integration
 
-Add SDK dependency in your app build.gradle as following:
+To integrate via Maven, add the following dependency in your app's `build.gradle` file:
 
-```java
-implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:v_3.8.2'
+Add the token to $HOME/.gradle/gradle.properties
+
+```gradle
+authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 ```
-in Project build.gradle
-```java
 
+```gradle
+dependencies {
+    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:v_3.8.2'
+}
+```
+
+Ensure that you have the Maven repository URL added to your project's repositories in Project level `build.gradle` file:
+
+```gradle
 allprojects {
     repositories {
         ...
@@ -29,57 +52,76 @@ allprojects {
  }
 ```
 
-Add the token to $HOME/.gradle/gradle.properties
+### 2. AAR File Integration
 
-```java
-authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
+Download the AAR file from the following link:
+[Version 3.9.1](https://ttsdk-release.s3.eu-west-1.amazonaws.com/android/3.9.1/3.9.1-release.aar)
+
+To integrate using the AAR file, follow these steps:
+1. Copy the downloaded AAR file into your project's `libs` directory.
+2. Open your app's `build.gradle` file and add the following dependency:
+
+```gradle
+dependencies {
+    implementation files('libs/tellotalksdk.aar')
+}
 ```
 
-### Using AAR file
+## Configuration
 
-You can download the AAR File for version [3.9.1](https://ttsdk-release.s3.eu-west-1.amazonaws.com/android/3.9.1/3.9.1-release.aar)
+To configure the SDK within your app, follow these steps:
+1. **Initialize the SDK** in your Application class
 
-## Usage
+    ```java
+    public class YourApplication extends Application {
+    
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            
+            // Initialize the SDK
+            TelloApiClient.Builder builder = new TelloApiClient.Builder()
+                                            .accessKey("<YOUR_ACCESS_KEY_HERE>")
+                                            .projectToken("<YOUR_PROJECT_TOKEN_HERE>")
+                                            .CRYPTO_LIB_KEY("<USE_PROVIDED_VALUES>")
+                                            .CRYPTO_LIB_IV("<USE_PROVIDED_VALUES>")
+                                            .setContext(getApplicationContext())
+                                            .notificationIcon  ("<PROVIDE_DRAWABLE_RESOURCE_FOR_ICON_HERE>");
+            //build sdk into singleton object to reference later via application class
+            telloApiClient = builder.build();
+        }
+    }
+    ```
 
-Initialize **TelloApiClient** before using any of its features.
+    After initialization you can use **TelloApiClient** object to access SDK features. You can get the singleton instance of the client in the following way.
 
-```java
-TelloApiClient.Builder builder = new TelloApiClient.Builder()
-.accessKey("<YOUR_ACCESS_KEY_HERE>")
-.projectToken("<YOUR_PROJECT_TOKEN_HERE>")
-.CRYPTO_LIB_KEY("<USE_PROVIDED_VALUES>")
-.CRYPTO_LIB_IV("<USE_PROVIDED_VALUES>")
-.setContext(getApplicationContext())
-.notificationIcon  ("<PROVIDE_DRAWABLE_RESOURCE_FOR_ICON_HERE>");
+    ```java
+    MyApplication.getInstance().getTelloApiClient()
+    ```
 
-telloApiClient = builder.build();
-```
- After initialization you can use **TelloApiClient** object to access SDK features. You can get the singleton instance of the client in the following way.
+2. **Register TelloTalkSDK** with a User
 
- ```java
- MyApplication.getInstance().getTelloApiClient()
- ```
+    Initiate SDK with a user to start receiving messages and to access chat interface (This is typically done in your main activity where you have access to uniquely identify your users.):
 
-### Initiate TelloTalkSDK with a User
+    ```java
+    telloApiClient.registerUser(String profileId,
+                                String name, String mobileNumber,
+                                String customerType,
+                                HashMap<String, String> hashMap,
+                                OnSuccessListener<Boolean> successListener)
+    ```
 
-Initiate SDK with a user to start receiving messages and to access chat interface:
+    In this method the `HashMap<String, String>` is optional.
+    `OnSuccessListener` will return if user is register or not. If this method returns true, SDK will start receiving messages and you can access SDK user interface when needed.
 
-```java
+3. **Set Locality**(Optional)
 
-telloApiClient.registerUser(String profileId, String name, String mobileNumber, String customerType, HashMap<String, String> hashMap, OnSuccessListener<Boolean> successListener)
-
-```
-
-In this method the `HashMap<String, String>` is optional.It will return true/false if user is register or not. If this method returns true, SDK will start receiving messages and you can access SDK user interface when needed.
-
-### Set Locality
-
-TelloTalkSDK natively supports both English and Urdu layout. You can set the locality from the following method.
-```java
-// en for english
-// ur for urdu
-telloApiClient.setLocality("en");
-```
+    TelloTalkSDK natively supports both English and Urdu layout. You can set the locality from the following method.
+    ```java
+    // en for english
+    // ur for urdu
+    telloApiClient.setLocality("en");
+    ```
 
 ### Opening Chat Interface from TelloTalkSDK
 
