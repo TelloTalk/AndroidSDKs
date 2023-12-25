@@ -122,6 +122,7 @@ To configure the SDK within your app, follow these steps:
     // ur for urdu
     telloApiClient.setLocality("en");
     ```
+## USAGE
 
 ### Opening Chat Interface from TelloTalkSDK
 
@@ -277,21 +278,6 @@ If your Compile and Target SDK is above 28 (Android 9) in build.gradle. Then you
 <application
  android:requestLegacyExternalStorage="true"
    />
-```
-
-
-
-### Release Guide
-
-Add these Proguard rules for release build
-```java
-//Proguard Rules
--keepattributes  * Annotation *
--keepclassmembers class ** {
-@org.greenrobot.eventbus.Subscribe <method>;
-}
--keep enum org.greenrobot.eventbus.ThreadMode {*;}
--keep class com.tilismtech.** { *; }
 ```
 
 ## Customizing UI
