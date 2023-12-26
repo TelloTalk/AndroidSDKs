@@ -22,7 +22,7 @@ To use the SDK, you'll need the following:
 ## Installation
 Installation can be done either remotely via maven or using aar locally.
 
-### 1. Maven Integration
+### 1. Maven Integration(Recommended)
 
 To integrate via Maven, add the following dependency in your app's `build.gradle` file:
 
@@ -59,12 +59,54 @@ Download the AAR file from the following link:
 
 To integrate using the AAR file, follow these steps:
 1. Copy the downloaded AAR file into your project's `libs` directory.
-2. Open your app's `build.gradle` file and add the following dependency:
+2. Open your app level `build.gradle` file and add the following dependency:
 
 ```gradle
 dependencies {
     implementation files('libs/tellotalksdk.aar')
 }
+```
+
+3. In order for local aar to work you need to add it's dependencies in your app level `build.gradle` file
+
+```gradle
+    //SDK dependencies
+    //android core
+    implementation 'androidx.core:core:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation "androidx.drawerlayout:drawerlayout:1.0.0"
+    implementation 'androidx.exifinterface:exifinterface:1.0.0'
+    implementation 'androidx.browser:browser:1.0.0'
+
+    //material design
+    implementation 'com.google.android.material:material:1.3.0-alpha03'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+
+    //Image Handling
+    implementation('com.facebook.fresco:fresco:2.0.0')
+
+    //retrofit for network
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okio:okio:1.16.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+
+    //room database
+    implementation 'androidx.room:room-runtime:2.0.0'
+    annotationProcessor 'androidx.room:room-compiler:2.0.0'
+
+    //android architecture
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+    implementation 'androidx.fragment:fragment-ktx:1.3.6'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+
+    //Jsoup
+    implementation 'org.jsoup:jsoup:1.11.2'
 ```
 
 ## Configuration
