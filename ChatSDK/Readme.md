@@ -1,6 +1,3 @@
-
-# TelloTalk SDK
-
 # TelloTalk Android Chat SDK
 
 TelloTalk Android Chat SDK is a comprehensive solution for integrating a ready-made chatting system into your Android applications seamlessly.
@@ -34,7 +31,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ```gradle
 dependencies {
-    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:v_3.8.2'
+    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.2'
 }
 ```
 
