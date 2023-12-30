@@ -52,7 +52,7 @@ allprojects {
 ### 2. AAR File Integration
 
 Download the AAR file from the following link:
-[Version 3.9.1](https://ttsdk-release.s3.eu-west-1.amazonaws.com/android/3.9.1/3.9.1-release.aar)
+[Version 3.9.2](https://ttsdk-release.s3.eu-west-1.amazonaws.com/android/3.9.2/tellotalksdk-3.9.2.aar)
 
 To integrate using the AAR file, follow these steps:
 1. Copy the downloaded AAR file into your project's `libs` directory.
