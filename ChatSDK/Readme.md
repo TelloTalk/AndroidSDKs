@@ -31,7 +31,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ```gradle
 dependencies {
-    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.2'
+    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.6'
 }
 ```
 
@@ -285,10 +285,7 @@ telloApiClient.setAnnouncementCLickedListener(this);
 Add the following permissions in the manifest file.
 
 ```java
-       <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-            android:maxSdkVersion="29"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    
   <queries>
         <!-- Browser -->
         <intent>
@@ -307,16 +304,6 @@ Add the following permissions in the manifest file.
         </intent>
     </queries>
 
-
-```
-
-### Android 11 support
-
-If your Compile and Target SDK is above 28 (Android 9) in build.gradle. Then you should add Storage Permission Flag in your AndroidManifest.xml:
-```java
-<application
- android:requestLegacyExternalStorage="true"
-   />
 ```
 
 ## Customizing UI
