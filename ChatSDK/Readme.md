@@ -172,6 +172,20 @@ There are 2 signatures for this function,
  ```java
  telloApiClient.openCorporateChat(Activity activity, String initiateMsg, String customData)
 ```
+1.1 This will only show the previous messages. User won't be able to initate new chat or continue last chat.
+ ```java
+ telloApiClient.setAllowSending(false);
+```
+
+1.2 This will hide the messages in the editable field that are passed from host app to the SDK
+ ```java
+ telloApiClient.setHideMsgFromUser(true);
+```
+
+1.3 This will hide the large send message button from the bottom that is shown when there's no open chat.
+ ```java
+ telloApiClient.setShowLargeSendButton(false);
+```
 
 2. This will initiate a chat with the provided department instantly.
 
