@@ -31,7 +31,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ```gradle
 dependencies {
-    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.22'
+    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.24'
 }
 ```
 
@@ -42,7 +42,6 @@ allprojects {
     repositories {
         ...
         maven {
-            url "https://jitpack.io"
             credentials { username authToken }
         }
     }
@@ -52,7 +51,7 @@ allprojects {
 ### 2. AAR File Integration
 
 Download the AAR file from the following link:
-[Version 3.9.22](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.9.22.aar)
+[Version 3.9.24](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.9.24.aar)
 
 To integrate using the AAR file, follow these steps:
 1. Copy the downloaded AAR file into your project's `libs` directory.
@@ -69,41 +68,44 @@ dependencies {
 ```gradle
     //SDK dependencies
     //android core
-    implementation 'androidx.core:core:1.3.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation "androidx.drawerlayout:drawerlayout:1.0.0"
-    implementation 'androidx.exifinterface:exifinterface:1.0.0'
-    implementation 'androidx.browser:browser:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
 
-    //material design
-    implementation 'com.google.android.material:material:1.3.0-alpha03'
-    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+    //material design    
 
     //Image Handling
-    implementation('com.facebook.fresco:fresco:2.0.0')
+    implementation('com.facebook.fresco:fresco:3.5.0'){
+        exclude group: 'com.facebook.fresco', module: 'animated-base'
+        exclude group: 'com.facebook.fresco', module: 'animated-drawable'
+        exclude group: 'com.facebook.fresco', module: 'animated-gif'
+        exclude group: 'com.facebook.fresco', module: 'animated-webp'
+        exclude group: 'com.facebook.fresco', module: 'nativeimagefilters'
+        exclude group: 'com.facebook.fresco', module: 'memory-type-native'
+        exclude group: 'com.facebook.fresco', module: 'soloader'
+    }
 
     //retrofit for network
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-    implementation 'com.squareup.okio:okio:1.16.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     //room database
-    implementation 'androidx.room:room-runtime:2.0.0'
-    annotationProcessor 'androidx.room:room-compiler:2.0.0'
+    implementation "androidx.room:room-runtime:2.6.1"
+    annotationProcessor "androidx.room:room-compiler:2.6.1"
 
     //android architecture
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
-    implementation 'androidx.fragment:fragment-ktx:1.3.6'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "android.arch.lifecycle:viewmodel:1.1.1"
+    implementation "androidx.fragment:fragment-ktx:1.8.5"
 
     //Jsoup
-    implementation 'org.jsoup:jsoup:1.11.2'
+    implementation 'org.jsoup:jsoup:1.13.1'
 ```
 
 ## Configuration
