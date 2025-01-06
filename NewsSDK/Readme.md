@@ -12,7 +12,7 @@ You must have **AccessKey** and **ProjectToken** to use this SDK in your applica
 Add SDK dependency in your app build.gradle as following:
 
 ```java
-implementation 'com.github.tellotalksdk:Android-TellotalkSDK-News:tellotalk-news-0.2.3'
+implementation 'com.github.tellotalksdk:Android-TellotalkSDK-News:1.0.3'
 ```
 in Project build.gradle
 ```java
