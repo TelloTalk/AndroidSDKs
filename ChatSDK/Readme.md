@@ -31,7 +31,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ```gradle
 dependencies {
-    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.25'
+    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.26'
 }
 ```
 
@@ -51,7 +51,7 @@ allprojects {
 ### 2. AAR File Integration
 
 Download the AAR file from the following link:
-[Version 3.9.25](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.9.25.aar)
+[Version 3.9.26](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.9.26.aar)
 
 To integrate using the AAR file, follow these steps:
 1. Copy the downloaded AAR file into your project's `libs` directory.
@@ -67,18 +67,27 @@ dependencies {
 
 ```gradle
     //SDK dependencies
-    //android core
+    implementation files('libs/tellotalksdk.aar')
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'com.google.firebase:firebase-messaging:24.1.0'
     implementation 'androidx.core:core-ktx:1.15.0'
     implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'com.google.android.material:material:1.12.0'
+    implementation 'com.google.firebase:firebase-crashlytics:19.4.1'
+    implementation 'com.google.firebase:firebase-analytics:22.3.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
+    implementation 'com.google.android.material:material:1.12.0'
 
-    //material design    
-
-    //Image Handling
-    implementation('com.facebook.fresco:fresco:3.5.0'){
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+    implementation 'com.google.code.gson:gson:2.12.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
+    implementation "android.arch.lifecycle:viewmodel:1.1.1"
+    implementation "androidx.fragment:fragment-ktx:1.8.6"
+    implementation('com.facebook.fresco:fresco:3.6.0'){
         exclude group: 'com.facebook.fresco', module: 'animated-base'
         exclude group: 'com.facebook.fresco', module: 'animated-drawable'
         exclude group: 'com.facebook.fresco', module: 'animated-gif'
@@ -87,25 +96,10 @@ dependencies {
         exclude group: 'com.facebook.fresco', module: 'memory-type-native'
         exclude group: 'com.facebook.fresco', module: 'soloader'
     }
-
-    //retrofit for network
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
-    implementation 'com.google.code.gson:gson:2.11.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-
-    //room database
     implementation "androidx.room:room-runtime:2.6.1"
     annotationProcessor "androidx.room:room-compiler:2.6.1"
-
-    //android architecture
-    implementation "android.arch.lifecycle:extensions:1.1.1"
-    implementation "android.arch.lifecycle:viewmodel:1.1.1"
-    implementation "androidx.fragment:fragment-ktx:1.8.5"
-
-    //Jsoup
-    implementation 'org.jsoup:jsoup:1.13.1'
+    kapt "androidx.room:room-compiler:2.6.1"
+    implementation 'org.jsoup:jsoup:1.19.1'
 ```
 
 ## Configuration
@@ -174,17 +168,17 @@ There are 2 signatures for this function,
  ```java
  telloApiClient.openCorporateChat(Activity activity, String initiateMsg, String customData)
 ```
-1.1 This will only show the previous messages. User won't be able to initate new chat or continue last chat.
+1.1 This will only show the previous messages. User won't be able to initate new chat or continue last chat. Default value is false. Pass ```java true ``` to see the message input field. Pass ```java false ``` to only view old messages from chat history.
  ```java
- telloApiClient.setAllowSending(false);
+ telloApiClient.setAllowSending(true);
 ```
 
-1.2 This will hide the messages in the editable field that are passed from host app to the SDK
+1.2 This will hide the messages in the editable field that are passed from host app to the SDK. Default value is false. Pass ```java true ``` to see the hardcoded message in the input field from the host app intent extras. Pass ```java false ``` to hide it. It will be sent appended with a new line after what the user enters in the message input field.
  ```java
  telloApiClient.setHideMsgFromUser(true);
 ```
 
-1.3 This will hide the large send message button from the bottom that is shown when there's no open chat.
+1.3 This will hide the large send message button from the bottom, that is shown when user wants to initiate new chat. Default value is true.
  ```java
  telloApiClient.setShowLargeSendButton(false);
 ```
