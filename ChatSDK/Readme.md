@@ -103,6 +103,10 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.6.1"
     kapt "androidx.room:room-compiler:2.6.1"
     implementation 'org.jsoup:jsoup:1.19.1'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.29'
+    implementation ('io.socket:socket.io-client:2.1.2') {
+        exclude group: 'org.json', module: 'json'
+    }
 ```
 
 ## Configuration
