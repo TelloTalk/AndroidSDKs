@@ -31,7 +31,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ```gradle
 dependencies {
-    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.26'
+    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.10.0'
 }
 ```
 
@@ -51,7 +51,7 @@ allprojects {
 ### 2. AAR File Integration
 
 Download the AAR file from the following link:
-[Version 3.9.26](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.9.26.aar)
+[Version 3.10.0](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.10.0.aar)
 
 To integrate using the AAR file, follow these steps:
 1. Copy the downloaded AAR file into your project's `libs` directory.
@@ -105,14 +105,9 @@ dependencies {
 ## Configuration
 
 To configure the SDK within your app, follow these steps:
-1. **Initialize the SDK** in your Application class
+1. **Initialize the SDK**
 
     ```java
-    public class YourApplication extends Application {
-    
-        @Override
-        public void onCreate() {
-            super.onCreate();
             
             // Initialize the SDK
             TelloApiClient.Builder builder = new TelloApiClient.Builder()
@@ -121,17 +116,13 @@ To configure the SDK within your app, follow these steps:
                                             .CRYPTO_LIB_KEY("<USE_PROVIDED_VALUES>")
                                             .CRYPTO_LIB_IV("<USE_PROVIDED_VALUES>")
                                             .setContext(getApplicationContext())
-                                            .notificationIcon  ("<PROVIDE_DRAWABLE_RESOURCE_FOR_ICON_HERE>");
-            //build sdk into singleton object to reference later via application class
+                                            .notificationIcon  ("<PROVIDE_DRAWABLE_RESOURCE_FOR_ICON_HERE>")
+                                            .showSnack(false)
+                                            .telloApiClient.setGoogleApiKey(getString(R.string.API_KEY));//optional
+                                            
+            //build sdk into singleton object to reference later
             telloApiClient = builder.build();
-        }
-    }
-    ```
 
-    After initialization you can use **TelloApiClient** object to access SDK features. You can get the singleton instance of the client in the following way.
-
-    ```java
-    MyApplication.getInstance().getTelloApiClient()
     ```
 
 2. **Register TelloTalkSDK** with a User
@@ -139,14 +130,9 @@ To configure the SDK within your app, follow these steps:
     Initiate SDK with a user to start receiving messages and to access chat interface (This is typically done in your main activity where you have access to uniquely identify your users.):
 
     ```java
-    telloApiClient.registerUser(String profileId,
-                                String name, String mobileNumber,
-                                String customerType,
-                                HashMap<String, String> hashMap,
-                                OnSuccessListener<Boolean> successListener)
+    telloApiClient.registerUser(String profileId, String name,String mobileNumber,String customerType, OnSuccessListener<Boolean> listener)
+                              
     ```
-
-    In this method the `HashMap<String, String>` is optional.
     `OnSuccessListener` will return if user is register or not. If this method returns true, SDK will start receiving messages and you can access SDK user interface when needed.
 
 3. **Set Locality**(Optional)
@@ -157,183 +143,80 @@ To configure the SDK within your app, follow these steps:
     // ur for urdu
     telloApiClient.setLocality("en");
     ```
-## USAGE
 
-### Opening Chat Interface from TelloTalkSDK
+## Way to enter TelloTalkSdk UI
 
-There are 2 signatures for this function,
-
-1. This will prompt users to select a department and will initiate a chat after the user selects one.
-
+Following configurations should be handled properly to enter the chat sdk conversation view.
  ```java
- telloApiClient.openCorporateChat(Activity activity, String initiateMsg, String customData)
-```
-1.1 This will only show the previous messages. User won't be able to initate new chat or continue last chat. Default value is false. Pass ```java true ``` to see the message input field. Pass ```java false ``` to only view old messages from chat history.
- ```java
- telloApiClient.setAllowSending(true);
+   telloApiClient.showBundledMsg = false //true if initiateMsg should be editable in the sdk message input field, false otherwise
+   telloApiClient.showLargeSendButton = true //false if button should be hidden and message input field should be shown
+   telloApiClient.showPreviousMessagesOnly = false //true to show only history of the user
+   telloApiClient.showDepartmentListDialog = true //false if you want to show departments to the users using your own custom UI, must                                                         pass Department object in openConversation method in this case
 ```
 
-1.2 This will hide the messages in the editable field that are passed from host app to the SDK. Default value is false. Pass ```java true ``` to see the hardcoded message in the input field from the host app intent extras. Pass ```java false ``` to hide it. It will be sent appended with a new line after what the user enters in the message input field.
- ```java
- telloApiClient.setHideMsgFromUser(true);
-```
-
-1.3 This will hide the large send message button from the bottom, that is shown when user wants to initiate new chat. Default value is true.
- ```java
- telloApiClient.setShowLargeSendButton(false);
-```
-
-2. This will initiate a chat with the provided department instantly.
-
- ```java
- telloApiClient.openCorporateChat(Activity activity, String s, String customData, DepartmentConversations departmentConversations)
-```
-
-**Throws IllegalStateException:** If user is not loggedIn or if the feature is'nt supported from Business. It is recommended to write this function in a try/catch block to gracefully catch this exception.
-
-### Get Department List
-
-If you want to avoid the department selection prompt, you can get the department list from the following function.
-
+In order to open the chat for the two way department type use the follwing method:
 ```java
- List<DepartmentConversations> departmentList = telloApiClient.getDepartment()
+    telloApiClient.openConversation(Activity activity, String initiateMsg, String customData)
 ```
 
-### Get Unread Message Count
-
-You can get unread messages count outside the SDK by implementing `MessageCounterListener` in a class and passing the instance of the class in the following way:
+In order to open the screen for one way department type use the follwing method:
 ```java
-telloApiClient.setMessageCounterListener(this);
+    telloApiClient.openAnnouncements(Activity activity, telloApiClient?.departmentConversations?.first { it?.department?.dptType == "1" })
 ```
 
-### Get Click event on Buttons in Broadcast Message (Local Broadcast OR Local Broadcast with Keys) 
+If user is not loggedIn or feature is not provided, method will throw IllegalStateException.
 
-Button click events from inside SDK are fired through the Android's `LocalBroadcastManager`. You can register for an intent in the following way,
+You can get unread messages count outside the sdk using Listener :
 ```java
-private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        // Get string data included in the Intent
-        String message = String.valueOf(intent.getStringExtra("message"));
-        Log.d("receiver", "Got message: " + message);
-        
-        // Get map data included in the Intent
-        HashMap<String, String> map = new HashMap<String, String>();
-        map = (HashMap<String, String>) intent.getSerializableExtra("key_value_map");
-        Log.d("receiver", "Got map: " + map);
-    }
-};
-
-LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-        new IntentFilter("custom-event-name"));
+ public interface MessageCounterListener {
+    void onMessageCounterUpdate(int count);
+}
 ```
-
-## Configuring Push Notifications
-
-### Provide Access Key and Sender ID
-
-In order to send FCM notifications to your application, we need credentials of your FCM service. Please ensure that you have provided the credentials on our [Admin Portal](https://admin.tellocast.com)
-
 ### Receiving Message Notifications
-To receive messages notification using FCM you need to provide the updated FCM Token by using the following method:
+To receive messages notification using FCM you need to set Updated FCM Token by using following method :
 ```java
   telloApiClient.updateFcmToken(String fcmToken)
 ```
 
-### Providing Notification Click Entry Point
+And You have to implement FirebaseMessagingService to receive FCM.. Now if you receive FCM with data having entry
 
-Provide the entry point where the app should start when a user taps on a notification. Typically you'll be providing your splash activity package name here (e.g. `com.tellotalksdk.SplashActivity`).
-
+**tellotalk-content-available**, you must call following SDK method to receive messages :
 ```java
-MyApplication.getInstance().telloApiClient.setPackageName("<>");
+  HashMap<String,String> map = new HashMap<>();
+  map.putAll(remoteMessage.getData());
+        telloApiClient.onMessageNotificationReceived(HashMap<String, String> mapID)
 ```
 
-### Delegating Notification to TelloTalkSDK
-
-When you receive FCM with data having entry **content-available-IM**, you'll have to call the `onMessageNotificationReceived` method of the `TelloApiClient`. A sample override implmentation of `onMessageReceived` is given below.
-
+### Get Broadcast event from FormattedView
+Get Event from broadcast message in One Way Communication by implementing the following interface.
 ```java
-private static final String CONTENT_AVAILABLE_IM = "content-available-IM";
-
-@Override
-public void onMessageReceived(RemoteMessage remoteMessage) {
-    super.onMessageReceived(remoteMessage);
-    if (remoteMessage.getData().size() > 0) {
-        try {
-            HashMap<String,String> map = new HashMap<>();
-            map.putAll(remoteMessage.getData());
-            
-            String jobCode = map.get("jobCode");
-            if (jobCode.equals(CONTENT_AVAILABLE_IM)) {
-                MyApplication.getInstance().getTelloApiClient().onMessageNotificationReceived(map);
-            }
-        } catch (Exception e) {
-            // Do your application specific notification handling here.
-        }
-    }
+public interface AnnouncementSelectionListener {
+    void onAnnouncementClicked(String message_id, String broadcastFrom, String message_type, String campaignId);
 }
 ```
 
-### Get Broadcast Notification Click event
+### Color Changes on UI interface
 
-You can get a notification click event by implementing `onNotificationClickListener` in a class and passing the instance of the class in the following way:
-```java
-telloApiClient.setNotificationCLickedListener(this);
-```
-
-### Get Broadcast Read more Click event
-
-You can get a click event on load more link by implementing `setAnnouncementCLickedListener` in a class and passing the instance of the class in the following way:
-```java
-telloApiClient.setAnnouncementCLickedListener(this);
-```
-
-## Special Android Version Support
-
-### Android 12 support
-
-Add the following permissions in the manifest file.
-
-```java
-    
-  <queries>
-        <!-- Browser -->
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="http" />
-        </intent>
-
-        <!-- Camera -->
-        <intent>
-            <action android:name="android.media.action.IMAGE_CAPTURE" />
-        </intent>
-
-        <!-- Gallery -->
-        <intent>
-            <action android:name="android.intent.action.GET_CONTENT" />
-        </intent>
-    </queries>
-
-```
-
-## Customizing UI
-
-You can customize the app interface by changing color values of the following color resources. a diagram is show below to help you connect color names with their relevant usage in the UI.
-
-```java
-<color name="toolbar_color">#fdfdfc</color>
-<color name="toolbar_title_text_color">#000000</color>
-<color name="outgoingMessageBubbleColor">#FBF39A</color>
-<color name="outgoingMessageBubbleTextColor">#FBF39A</color>
-<color name="incomingMessageBubbleColor">#FBF39A</color>
-<color name="incomingMessageBubbleTextColor">#FBF39A</color>
-<color name="indicator">#009688</color>
-<color name="float_buttons">#009688</color>
-<color name="submit_button_vote">#FFE500</color>
-<color name="timeOutgoingColor">#000000</color>
-<color name="timeIncomingColor">#000000</color>
-<color name="audioRecordButtonColor">#ffc62828</color>
-<color name="messageButtonColor">#ffc62828</color>
+UI Customization
+```xml
+     <color name="toolbar_color">#fdfdfc</color>
+    <color name="toolbar_title_text_color">#000000</color>
+    <color name="outgoingMessageBubbleColor">#FBF39A</color>
+    <color name="outgoingMessageBubbleTextColor">#FBF39A</color>
+    <color name="incomingMessageBubbleColor">#FBF39A</color>
+    <color name="incomingMessageBubbleTextColor">#FBF39A</color>
+    <color name="indicator">#009688</color>
+    <color name="float_buttons">#009688</color>
+    <color name="submit_button_vote">#FFE500</color>
+    <color name="timeOutgoingColor">#000000</color>
+    <color name="timeIncomingColor">#000000</color>
+    <color name="audioRecordButtonColor">#ffc62828</color>
+    <color name="messageButtonColor">#ffc62828</color>
 ```
 
 <img src="chat_labels.jpg" alt="UI Customization"/>
+
+
+}
+```
+
