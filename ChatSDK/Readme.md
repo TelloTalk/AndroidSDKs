@@ -15,6 +15,9 @@ To use the SDK, you'll need the following:
 
 - **Access Key**: `<YOUR_ACCESS_KEY>`
 - **Project Token**: `<YOUR_PROJECT_TOKEN>`
+
+Create a new app in admin portal with the follwing link from where you can get the above keys:
+https://admin-staging.tilismcast.com/
   
 ## Installation
 Installation can be done either remotely via maven or using aar locally.
