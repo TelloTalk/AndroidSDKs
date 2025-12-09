@@ -163,6 +163,7 @@ In order to open the screen for one way department type use the follwing method:
 ```java
     telloApiClient.openAnnouncements(Activity activity, telloApiClient?.departmentConversations?.first { it?.department?.dptType == "1" })
 ```
+You can use getDepartmentsList method to pass any department in the method that has departmentType = 1
 
 If user is not loggedIn or feature is not provided, method will throw IllegalStateException.
 
