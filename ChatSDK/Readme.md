@@ -34,7 +34,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ```gradle
 dependencies {
-    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.10.0'
+    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.10.1'
 }
 ```
 
