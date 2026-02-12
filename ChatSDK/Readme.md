@@ -35,7 +35,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 ```gradle
 dependencies {
     implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.10.1' // for staging app integration
-    // implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.28' //for live app integration
+    // implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.29' //for live app integration
 }
 ```
 
@@ -56,7 +56,7 @@ allprojects {
 
 Download the AAR file from the following link:
 [Version 3.10.1](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.10.1.aar) // for staging app integration
-// [Version 3.9.28](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.9.28.aar) // for live app integration
+// [Version 3.9.29](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.9.29.aar) // for live app integration
 
 To integrate using the AAR file, follow these steps:
 1. Copy the downloaded AAR file into your project's `libs` directory.
