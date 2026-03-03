@@ -34,7 +34,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ```gradle
 dependencies {
-    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.10.1' // for staging app integration
+    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.10.4' // for staging app integration
     // implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.29' //for live app integration
 }
 ```
@@ -55,7 +55,7 @@ allprojects {
 ### 2. AAR File Integration
 
 Download the AAR file from the following link:
-[Version 3.10.1](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.10.1.aar) // for staging app integration
+[Version 3.10.4](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.10.4.aar) // for staging app integration
 // [Version 3.9.29](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.9.29.aar) // for live app integration
 
 To integrate using the AAR file, follow these steps:
@@ -139,10 +139,10 @@ To configure the SDK within your app, follow these steps:
     Initiate SDK with a user to start receiving messages and to access chat interface (This is typically done in your main activity where you have access to uniquely identify your users.):
 
     ```java
-    telloApiClient.registerUser(String profileId, String name,String mobileNumber,String customerType, OnSuccessListener<Boolean> listener)
+    telloApiClient.registerUser(String profileId, String name,String mobileNumber,String customerType, OnSuccessListener<String> listener)
                               
     ```
-    `OnSuccessListener` will return if user is register or not. If this method returns true, SDK will start receiving messages and you can access SDK user interface when needed.
+    `OnSuccessListener` will return if user is register or not. If this method returns "200", SDK will start receiving messages and you can access SDK user interface when needed.
 
 3. **Set Locality**(Optional)
 
@@ -181,11 +181,6 @@ You can get unread messages count outside the sdk using Listener :
  public interface MessageCounterListener {
     void onMessageCounterUpdate(int count);
 }
-```
-### Receiving Message Notifications
-To receive messages notification using FCM you need to set Updated FCM Token by using following method :
-```java
-  telloApiClient.updateFcmToken(String fcmToken)
 ```
 
 And You have to implement FirebaseMessagingService to receive FCM.. Now if you receive FCM with data having entry
