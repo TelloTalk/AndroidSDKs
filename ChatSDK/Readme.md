@@ -31,7 +31,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ```gradle
 dependencies {
-    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.10.0'
+    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.10.2'
 }
 ```
 
@@ -67,27 +67,8 @@ dependencies {
 
 ```gradle
     //SDK dependencies
+    implementation fileTree(include: ['*.aar'], dir: 'libs')
     implementation files('libs/tellotalksdk.aar')
-    testImplementation 'junit:junit:4.13.2'
-    implementation 'com.google.firebase:firebase-messaging:24.1.0'
-    implementation 'androidx.core:core-ktx:1.15.0'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation 'com.google.firebase:firebase-crashlytics:19.4.1'
-    implementation 'com.google.firebase:firebase-analytics:22.3.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.4.0'
-    implementation 'com.google.android.material:material:1.12.0'
-
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
-    implementation 'com.google.code.gson:gson:2.12.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
-    implementation "android.arch.lifecycle:viewmodel:1.1.1"
-    implementation "androidx.fragment:fragment-ktx:1.8.6"
-    implementation("com.squareup.okhttp3:okhttp-urlconnection:5.3.2")
     implementation('com.facebook.fresco:fresco:3.6.0'){
         exclude group: 'com.facebook.fresco', module: 'animated-base'
         exclude group: 'com.facebook.fresco', module: 'animated-drawable'
@@ -97,15 +78,20 @@ dependencies {
         exclude group: 'com.facebook.fresco', module: 'memory-type-native'
         exclude group: 'com.facebook.fresco', module: 'soloader'
     }
-    implementation "androidx.room:room-runtime:2.6.1"
-    annotationProcessor "androidx.room:room-compiler:2.6.1"
-    kapt "androidx.room:room-compiler:2.6.1"
-    implementation 'org.jsoup:jsoup:1.19.1'
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:5.3.2")
+    implementation 'androidx.room:room-runtime:2.8.4'
+    implementation 'androidx.room:room-common-jvm:2.8.4'
+    ksp 'androidx.room:room-compiler:2.8.4'
+    implementation 'org.jsoup:jsoup:1.21.2'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.29'
+    implementation ('io.socket:socket.io-client:2.1.2') {
+        exclude group: 'org.json', module: 'json'
+    }
 ```
 
-## Configuration
+## Implementation Guide
 
-To configure the SDK within your app, follow these steps:
+To implement the SDK within your app, follow these steps:
 1. **Initialize the SDK**
 
     ```kotlin
@@ -126,7 +112,7 @@ To configure the SDK within your app, follow these steps:
 
     ```
 
-2. **Register TelloTalkSDK** with a User
+2. **Register SDK with a user** 
 
    Initiate SDK with a user to start receiving messages and to access chat interface (This is typically done in your main activity where you have access to uniquely identify your users.):
 
@@ -145,46 +131,36 @@ To configure the SDK within your app, follow these steps:
 
 ## TelloTalkSdk UI configurations
 
-Following properties should be configured properly before entering the chat UI:
+Following properties should be configured properly before entering the SDK UI:
 
-1. Indicates whether bundled text should be shown in the chat UI
+1. Indicates whether `bundledMessage` should be shown in the SDK UI
     ```kotlin
    var showBundledMsg = false
    ```
-2. Indicates whether the large send button should be shown in the chat UI.
+2. Indicates whether the large send button should be shown in the SDK UI.
    ```kotlin
    var showLargeSendButton = true
    ```
-3. Indicates whether the chat UI should show previous messages only.
+3. Indicates whether the SDK UI should show previous messages only.
    ```kotlin
    var showPreviousMessagesOnly = false
    ```
-4. Indicates whether the default SDK popup would appear after the [openConversation] method has been called.
+4. Indicates whether the default SDK popup would appear after the `openConversation` method has been called.
    ```kotlin
    var showDepartmentListDialog = false
    ```
-
-## Default landing activity
-
-This method sets the activity of the host app which should be opened when the user clicks on the notification or
-TelloSdk activity finishes but the host activity has been destroyed or is not created
-
-```kotlin
-/**
-* Example:
-* returnActivityName(this.javaClass.name) -> in any activity class
-*/
-fun returnActivityName(activityName: String?)
-```
-
-## Set the language of the TelloTalkSdk
-
-This method is used to set the language of the sdk.
-current supported values are "en" for English and "ur" for Urdu
-
-```kotlin
-fun setLocality(lang: String?)
-```
+5. This method sets the activity of the host app which should be opened when the user clicks on the notification or TelloSdk activity finishes but the host activity has been destroyed or is not created
+   ```kotlin
+   /**
+   * Example:
+   * returnActivityName(this.javaClass.name) -> in any activity class
+   */
+   fun returnActivityName(activityName: String?)
+   ```
+6. This method is used to set the language of the sdk. Current supported values are "en" for English and "ur" for Urdu
+   ```kotlin
+   fun setLocality(lang: String?)
+   ```
 
 ## Ways to enter TelloTalkSdk UI
 
@@ -203,7 +179,6 @@ In order to open the screen for one way department type use the following method
 ```kotlin
     fun openAnnouncements(activity: Activity, department: Department)
 ```
-
 If user is not loggedIn or feature is not provided, method will throw IllegalStateException.
 
 
@@ -211,6 +186,7 @@ If user is not loggedIn or feature is not provided, method will throw IllegalSta
 
 You can get unread messages count for chat and announcement messages 
 outside the sdk by implementing this Listener in your activity or fragment:
+
 ```kotlin
 interface MessageCounterListener {
    fun onMessageCountUpdate(count:Int)
@@ -224,7 +200,6 @@ fun setMessageCounterListener(messageCounterListener: MessageCounterListener?)
 
 ## Receiving Message Notifications using FCM
 
-
 To receive notification using FCM you need to call this method inside the onMessageReceived callback of your FCM Service :
 ```kotlin
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -232,7 +207,7 @@ To receive notification using FCM you need to call this method inside the onMess
     }
 ```
 
-To open the TelloSDK screen directly from the notification, call the following method from the activity that is set as the returnActivityName:
+To open the SDK screen directly from the notification, call the following method from the activity that is set as the `returnActivityName`:
 
 ```kotlin
  fun launchConversationFromNotification(activity: Activity,profileId: String)
@@ -249,11 +224,18 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```
 
 ## Get Broadcast event from FormattedView
+
 Get Event from broadcast message in One Way Communication by implementing the following interface.
 ```java
 public interface AnnouncementSelectionListener {
    void onAnnouncementClicked(String message_id, String broadcastFrom, String message_type, String campaignId);
 }
+```
+And setting it using the following method:
+```kotlin
+fun setAnnouncementCLickedListener(
+        listener: AnnouncementSelectionListener
+    )
 ```
 
 ### Color Changes on UI interface
@@ -276,8 +258,5 @@ UI Customization
 ```
 
 <img src="chat_labels.jpg" alt="UI Customization"/>
-
-
-}
 ```
 
