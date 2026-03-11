@@ -16,9 +16,6 @@ To use the SDK, you'll need the following:
 - **Access Key**: `<YOUR_ACCESS_KEY>`
 - **Project Token**: `<YOUR_PROJECT_TOKEN>`
 
-Create a new app in admin portal with the follwing link from where you can get the above keys:
-https://admin-staging.tilismcast.com/
-  
 ## Installation
 Installation can be done either remotely via maven or using aar locally.
 
@@ -34,8 +31,7 @@ authToken=jp_p6dmteat0vu8e805pm7dl1k5c0
 
 ```gradle
 dependencies {
-    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.10.4' // for staging app integration
-    // implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.9.29' //for live app integration
+    implementation 'com.github.tellotalksdk:tellotalksdk_corporate_chat:3.10.0'
 }
 ```
 
@@ -55,11 +51,10 @@ allprojects {
 ### 2. AAR File Integration
 
 Download the AAR file from the following link:
-[Version 3.10.4](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.10.4.aar) // for staging app integration
-// [Version 3.9.29](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.9.29.aar) // for live app integration
+[Version 3.10.2](https://github.com/TelloTalk/AndroidSDKs/blob/main/ChatSDK/tellotalksdk-3.10.2.aar)
 
 To integrate using the AAR file, follow these steps:
-1. Copy the downloaded AAR file into your project's `libs` directory.
+1. Copy the downloaded AAR and sources file into your project's `libs` directory.
 2. Open your app level `build.gradle` file and add the following dependency:
 
 ```gradle
@@ -89,10 +84,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.12.1'
     implementation 'com.squareup.retrofit2:retrofit:2.11.0'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    implementation("com.squareup.okhttp3:okhttp-urlconnection:5.3.2")
     implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
     implementation "android.arch.lifecycle:viewmodel:1.1.1"
     implementation "androidx.fragment:fragment-ktx:1.8.6"
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:5.3.2")
     implementation('com.facebook.fresco:fresco:3.6.0'){
         exclude group: 'com.facebook.fresco', module: 'animated-base'
         exclude group: 'com.facebook.fresco', module: 'animated-drawable'
@@ -106,10 +101,6 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.6.1"
     kapt "androidx.room:room-compiler:2.6.1"
     implementation 'org.jsoup:jsoup:1.19.1'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.29'
-    implementation ('io.socket:socket.io-client:2.1.2') {
-        exclude group: 'org.json', module: 'json'
-    }
 ```
 
 ## Configuration
@@ -117,87 +108,151 @@ dependencies {
 To configure the SDK within your app, follow these steps:
 1. **Initialize the SDK**
 
-    ```java
+    ```kotlin
             
             // Initialize the SDK
-            TelloApiClient.Builder builder = new TelloApiClient.Builder()
+            val builder = TelloApiClient.Builder()
                                             .accessKey("<YOUR_ACCESS_KEY_HERE>")
                                             .projectToken("<YOUR_PROJECT_TOKEN_HERE>")
                                             .CRYPTO_LIB_KEY("<USE_PROVIDED_VALUES>")
                                             .CRYPTO_LIB_IV("<USE_PROVIDED_VALUES>")
-                                            .setContext(getApplicationContext())
+                                            .setApplicationContext(getApplicationContext())
                                             .notificationIcon  ("<PROVIDE_DRAWABLE_RESOURCE_FOR_ICON_HERE>")
                                             .showSnack(false)
                                             .telloApiClient.setGoogleApiKey(getString(R.string.API_KEY));//optional
                                             
             //build sdk into singleton object to reference later
-            telloApiClient = builder.build();
+            telloApiClient = builder.build()
 
     ```
 
 2. **Register TelloTalkSDK** with a User
 
-    Initiate SDK with a user to start receiving messages and to access chat interface (This is typically done in your main activity where you have access to uniquely identify your users.):
+   Initiate SDK with a user to start receiving messages and to access chat interface (This is typically done in your main activity where you have access to uniquely identify your users.):
 
-    ```java
-    telloApiClient.registerUser(String profileId, String name,String mobileNumber,String customerType, OnSuccessListener<String> listener)
+    ```kotlin
+    fun registerUser(
+        profileId:String,
+        name: String?="",
+        mobileNumber: String?="",
+        customerType: String?= "",
+        fcmToken: String?="",
+        successListener: (OnSuccessListener<String?>)? = null
+    )
                               
     ```
-    `OnSuccessListener` will return if user is register or not. If this method returns "200", SDK will start receiving messages and you can access SDK user interface when needed.
+   `OnSuccessListener` will return if user is register or not. If this method returns string "200", SDK will start receiving messages and you can access SDK user interface when needed.
 
-3. **Set Locality**(Optional)
+## TelloTalkSdk UI configurations
 
-    TelloTalkSDK natively supports both English and Urdu layout. You can set the locality from the following method.
-    ```java
-    // en for english
-    // ur for urdu
-    telloApiClient.setLocality("en");
-    ```
+Following properties should be configured properly before entering the chat UI:
 
-## Way to enter TelloTalkSdk UI
+1. Indicates whether bundled text should be shown in the chat UI
+    ```kotlin
+   var showBundledMsg = false
+   ```
+2. Indicates whether the large send button should be shown in the chat UI.
+   ```kotlin
+   var showLargeSendButton = true
+   ```
+3. Indicates whether the chat UI should show previous messages only.
+   ```kotlin
+   var showPreviousMessagesOnly = false
+   ```
+4. Indicates whether the default SDK popup would appear after the [openConversation] method has been called.
+   ```kotlin
+   var showDepartmentListDialog = false
+   ```
 
-Following configurations should be handled properly to enter the chat sdk conversation view.
- ```java
-   telloApiClient.showBundledMsg = false //true if initiateMsg should be editable in the sdk message input field, false otherwise
-   telloApiClient.showLargeSendButton = true //false if button should be hidden and message input field should be shown
-   telloApiClient.showPreviousMessagesOnly = false //true to show only history of the user
-   telloApiClient.showDepartmentListDialog = true //false if you want to show departments to the users using your own custom UI, must                                                         pass Department object in openConversation method in this case
+## Default landing activity
+
+This method sets the activity of the host app which should be opened when the user clicks on the notification or
+TelloSdk activity finishes but the host activity has been destroyed or is not created
+
+```kotlin
+/**
+* Example:
+* returnActivityName(this.javaClass.name) -> in any activity class
+*/
+fun returnActivityName(activityName: String?)
 ```
 
-In order to open the chat for the two way department type use the follwing method:
-```java
-    telloApiClient.openConversation(Activity activity, String initiateMsg, String customData)
+## Set the language of the TelloTalkSdk
+
+This method is used to set the language of the sdk.
+current supported values are "en" for English and "ur" for Urdu
+
+```kotlin
+fun setLocality(lang: String?)
 ```
 
-In order to open the screen for one way department type use the follwing method:
-```java
-    telloApiClient.openAnnouncements(Activity activity, telloApiClient?.departmentConversations?.first { it?.department?.dptType == "1" })
+## Ways to enter TelloTalkSdk UI
+
+If the `showDepartmentListDialog` is set to `false` use this method to fetch the departments and show in a custom UI:
+```kotlin
+    fun getDepartmentList(successListener: OnSuccessListener<List<Department>>?)
 ```
-You can use getDepartmentsList method to pass any department in the method that has departmentType = 1
+The `OnSuccessListener` will return the list of departments
+
+In order to open the chat for the two way department type use the following method:
+```kotlin
+    fun openConversation(activity: Activity, bundledMessage: String, extraMessage:String, department: Department? = null)
+```
+
+In order to open the screen for one way department type use the following method:
+```kotlin
+    fun openAnnouncements(activity: Activity, department: Department)
+```
 
 If user is not loggedIn or feature is not provided, method will throw IllegalStateException.
 
-You can get unread messages count outside the sdk using Listener :
-```java
- public interface MessageCounterListener {
-    void onMessageCounterUpdate(int count);
+
+## Receive and display unread message count
+
+You can get unread messages count for chat and announcement messages 
+outside the sdk by implementing this Listener in your activity or fragment:
+```kotlin
+interface MessageCounterListener {
+   fun onMessageCountUpdate(count:Int)
+   fun onAnnouncementCountUpdate(count:Int)
+}
+```
+And then calling this method to set the listener
+```kotlin
+fun setMessageCounterListener(messageCounterListener: MessageCounterListener?)
+```
+
+## Receiving Message Notifications using FCM
+
+
+To receive notification using FCM you need to call this method inside the onMessageReceived callback of your FCM Service :
+```kotlin
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+       telloApiClient.showFcmNotification(data = remoteMessage.data, context = this)
+    }
+```
+
+To open the TelloSDK screen directly from the notification, call the following method from the activity that is set as the returnActivityName:
+
+```kotlin
+ fun launchConversationFromNotification(activity: Activity,profileId: String)
+```
+For example:
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    //...
+   if(intent.extras?.getBoolean("fromNotification")==true){
+      intent.extras?.clear()
+      MyApplication.instance?.telloApiClient?.launchConversationFromNotification(this@HomeActivity,prefs?.getString("profileId","")?:"")
+   }
 }
 ```
 
-And You have to implement FirebaseMessagingService to receive FCM.. Now if you receive FCM with data having entry
-
-**tellotalk-content-available**, you must call following SDK method to receive messages :
-```java
-  HashMap<String,String> map = new HashMap<>();
-  map.putAll(remoteMessage.getData());
-        telloApiClient.onMessageNotificationReceived(HashMap<String, String> mapID)
-```
-
-### Get Broadcast event from FormattedView
+## Get Broadcast event from FormattedView
 Get Event from broadcast message in One Way Communication by implementing the following interface.
 ```java
 public interface AnnouncementSelectionListener {
-    void onAnnouncementClicked(String message_id, String broadcastFrom, String message_type, String campaignId);
+   void onAnnouncementClicked(String message_id, String broadcastFrom, String message_type, String campaignId);
 }
 ```
 
@@ -206,18 +261,18 @@ public interface AnnouncementSelectionListener {
 UI Customization
 ```xml
      <color name="toolbar_color">#fdfdfc</color>
-    <color name="toolbar_title_text_color">#000000</color>
-    <color name="outgoingMessageBubbleColor">#FBF39A</color>
-    <color name="outgoingMessageBubbleTextColor">#FBF39A</color>
-    <color name="incomingMessageBubbleColor">#FBF39A</color>
-    <color name="incomingMessageBubbleTextColor">#FBF39A</color>
-    <color name="indicator">#009688</color>
-    <color name="float_buttons">#009688</color>
-    <color name="submit_button_vote">#FFE500</color>
-    <color name="timeOutgoingColor">#000000</color>
-    <color name="timeIncomingColor">#000000</color>
-    <color name="audioRecordButtonColor">#ffc62828</color>
-    <color name="messageButtonColor">#ffc62828</color>
+<color name="toolbar_title_text_color">#000000</color>
+<color name="outgoingMessageBubbleColor">#FBF39A</color>
+<color name="outgoingMessageBubbleTextColor">#FBF39A</color>
+<color name="incomingMessageBubbleColor">#FBF39A</color>
+<color name="incomingMessageBubbleTextColor">#FBF39A</color>
+<color name="indicator">#009688</color>
+<color name="float_buttons">#009688</color>
+<color name="submit_button_vote">#FFE500</color>
+<color name="timeOutgoingColor">#000000</color>
+<color name="timeIncomingColor">#000000</color>
+<color name="audioRecordButtonColor">#ffc62828</color>
+<color name="messageButtonColor">#ffc62828</color>
 ```
 
 <img src="chat_labels.jpg" alt="UI Customization"/>
